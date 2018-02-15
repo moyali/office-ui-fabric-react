@@ -5,14 +5,37 @@ import FocusTransition from '../focus/FocusTransition';
 
 export default class ArrowNavigation extends BaseNavigationMode {
   // A map to save where the last focused element for each zone was (key=>zone root, value=>last focused element)
-  private static _lastFocusedMap: Map<HTMLElement, HTMLElement> = new Map<HTMLElement, HTMLElement>();
+  // private static _lastFocusedMap: Map<HTMLElement, HTMLElement> = new Map<HTMLElement, HTMLElement>();
 
   public get name(): string {
     return 'Arrow';
   }
 
   public get supportedSelectors(): string[] {
-    return [];
+    return ['firstChild', 'lastChild', 'parent'];
+  }
+
+  protected _select(modeRoot: HTMLElement, selector: string, currentElement: HTMLElement): HTMLElement | undefined {
+    const focusableChildren: A11yElement[] = this.manager.a11yElement(currentElement).focusTree.children;
+    let target: HTMLElement | undefined;
+
+    switch (selector) {
+      case 'firstChild':
+        target = focusableChildren[0] ? focusableChildren[0].htmlElement : undefined;
+        break;
+
+      case 'lastChild':
+        const lastChild: A11yElement | undefined =
+          focusableChildren.length > 0 ? focusableChildren[focusableChildren.length - 1] : undefined;
+        target = lastChild ? lastChild.htmlElement : undefined;
+        break;
+
+      case 'parent':
+        target = this.manager.a11yElement(currentElement).focusTree.parent.htmlElement;
+        break;
+    }
+
+    return target;
   }
 
   protected _navigate(
@@ -47,17 +70,17 @@ export default class ArrowNavigation extends BaseNavigationMode {
   }
 
   protected _onInwardFocus(modeRoot: HTMLElement, focusTransition: FocusTransition): void {
-    console.log(focusTransition);
-    const lastFocused: HTMLElement | undefined = ArrowNavigation._lastFocusedMap.get(modeRoot);
+    // console.log(focusTransition);
+    // const lastFocused: HTMLElement | undefined = ArrowNavigation._lastFocusedMap.get(modeRoot);
 
-    if (lastFocused) {
-      this.manager.focusTo(lastFocused);
-    }
+    // if (lastFocused) {
+    //   this.manager.focusTo(lastFocused);
+    // }
   }
 
   protected _onOutwardFocus(modeRoot: HTMLElement, focusTransition: FocusTransition): void {
-    if (focusTransition.src) {
-      ArrowNavigation._lastFocusedMap.set(modeRoot, focusTransition.src);
-    }
+    // if (focusTransition.src) {
+    //   ArrowNavigation._lastFocusedMap.set(modeRoot, focusTransition.src);
+    // }
   }
 }

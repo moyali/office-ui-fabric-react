@@ -579,7 +579,7 @@ export default class A11yManager {
 
                 case '$':
                   // nextElement = this._hierarchicalNavigation.select(selector, elem);
-                  nextElement = this._selectByNavigationMode(selector, elem);
+                  nextElement = this._selectByNavigationMode(selector, evt.target as HTMLElement);
                   break;
 
                 default:

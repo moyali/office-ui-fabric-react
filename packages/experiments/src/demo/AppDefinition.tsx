@@ -13,8 +13,14 @@ export const AppDefinition: IAppDefinition = {
         {
           component: require<any>('../a11y/A11yPage').A11yPage,
           key: 'a11y',
-          name: 'a11y',
-          url: '#/examples/a11y'
+          name: 'A11y Demo 1',
+          url: '#/examples/a11y1'
+        },
+        {
+          component: require<any>('../a11y/A11yPage2').A11yPage,
+          key: 'a11y',
+          name: 'A11y Demo 2',
+          url: '#/examples/a11y2'
         },
         {
           component: require<any>('../components/PositioningContainer/PositioningContainerPage').PositioningContainerPage,
